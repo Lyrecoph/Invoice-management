@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Générateur Prisma Client pour interagir avec la base de données
+// via Prisma Client en JavaScript/TypeScript.
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Définition de la source de données
+// SQLite est utilisé comme base de données.
+// L'URL de connexion est stockée dans une variable d'environnement DATABASE_URL.
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Définition du modèle User (Utilisateur)
+model User {
+  id       String   @id @default(uuid()) // Identifiant unique généré automatiquement (UUID)
+  name     String   // Nom de l'utilisateur
+  email    String   @unique // Email unique (aucun doublon autorisé)
+  invoices Invoice[] @relation("UserInvoices") // Relation avec les factures (Invoice)
+}
+
+// Définition du modèle Invoice (Facture)
+model Invoice {
+  id            String        @id // Identifiant unique
+  name          String        // Nom de la facture
+  issuerName    String        @default("") // Nom de l'émetteur (par défaut vide)
+  issuerAddress String        @default("") // Adresse de l'émetteur (par défaut vide)
+  clientName    String        @default("") // Nom du client (par défaut vide)
+  clientAddress String        @default("") // Adresse du client (par défaut vide)
+  invoiceDate   String        @default("") // Date de la facture (par défaut vide)
+  dueDate       String        @default("") // Date d'échéance (par défaut vide)
+  vatActive     Boolean       @default(false) // Indique si la TVA est active
+  vatRate       Float         @default(20) // Taux de TVA par défaut (20%)
+  status        Int           @default(1) // Statut de la facture (1 = actif par défaut)
+  lines         InvoiceLine[] @relation("InvoiceLines") // Relation avec les lignes de facture
+  userId        String // Clé étrangère vers l'utilisateur
+  createdById   User          @relation("UserInvoices", fields: [userId], references: [id]) // Relation avec User
+}
+
+// Définition du modèle InvoiceLine (Ligne de facture)
+model InvoiceLine {
+  id          String   @id @default(uuid()) // Identifiant unique généré automatiquement (UUID)
+  description String   @default("") // Description de l'article
+  quantity    Int      @default(0) // Quantité (par défaut 0)
+  unitPrice   Float    @default(0) // Prix unitaire (par défaut 0)
+  invoiceId   String? // Clé étrangère facultative vers la facture
+  invoice     Invoice? @relation("InvoiceLines", fields: [invoiceId], references: [id], onDelete: Cascade) // Relation avec Invoice
+}
