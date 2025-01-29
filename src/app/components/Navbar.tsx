@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import { Layers } from 'lucide-react';
+import { checkAndAddUser } from '../actions';
 
 const Navbar = () => {
     const pathname = usePathname();
+    const {user} = useUser();
+
     const navLinks = [
         {
             href: '/',
             label: 'Factures'
         }
-    ]
+    ];
+
+    useEffect(() => {
+        if(user?.primaryEmailAddress?.emailAddress && user.fullName){
+            checkAndAddUser(user?.primaryEmailAddress?.emailAddress, user.fullName)
+        }
+    }, [user])
 
     const isActiveLink = (href:string) => 
         pathname.replace(/\/$/, "") === href.replace(/\/$/, "");
