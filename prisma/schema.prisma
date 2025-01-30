@@ -35,7 +35,7 @@ model Invoice {
   dueDate       String        @default("") // Date d'échéance (par défaut vide)
   vatActive     Boolean       @default(false) // Indique si la TVA est active
   vatRate       Float         @default(20) // Taux de TVA par défaut (20%)
-  status        Int           @default(1) // Statut de la facture (1 = actif par défaut)
+  status        Int           @default(1) // Statut posssible de la facture (1 = brouillon par défaut), 2: en attente, 3: payée, 4: annulée, 5: impayée 
   lines         InvoiceLine[] @relation("InvoiceLines") // Relation avec les lignes de facture
   userId        String // Clé étrangère vers l'utilisateur
   createdById   User          @relation("UserInvoices", fields: [userId], references: [id]) // Relation avec User
