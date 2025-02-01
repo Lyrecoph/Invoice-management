@@ -94,7 +94,7 @@ const InvoiceComponent: React.FC<InvoiceComponentProps> = ({ invoice, index }) =
           </div>
           <div>
             <div className='stat-value'>
-              {calculateTotal()} £
+              {calculateTotal().toFixed(2)} £
             </div>
           </div>
           <div className='stat-desc'>
