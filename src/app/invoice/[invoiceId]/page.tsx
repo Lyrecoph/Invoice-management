@@ -10,6 +10,7 @@ import VATControl from '@/app/components/VATControl';
 import InvoiceLines from '@/app/components/InvoiceLines';
 import isEqual from 'lodash.isequal';
 import { useRouter } from 'next/navigation';
+import InvoicePDF from '@/app/components/InvoicePDF';
 
 const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
     const router = useRouter();
@@ -19,6 +20,7 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    
 
     const fetchInvoice = useCallback(async () => {
         try {
@@ -145,6 +147,7 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
                 </div>
                 <div className="flex w-full md:w-2/3 flex-col md:ml-4">
                     <InvoiceLines invoice={invoice} setInvoice={setInvoice} />
+                    <InvoicePDF invoice={invoice} totals={totals} />
                 </div>
             </div>
 

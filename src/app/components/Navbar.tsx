@@ -10,12 +10,11 @@ import { checkAndAddUser } from '../actions';
 const Navbar = () => {
     const pathname = usePathname();
     const {user} = useUser();
-
     const navLinks = [
         {
             href: '/',
             label: 'Factures'
-        }
+        },
     ];
 
     useEffect(() => {
