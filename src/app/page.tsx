@@ -20,6 +20,9 @@ export default function Home() {
   const [isNameValid, setIsNameValid] = useState(true);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   
+  // État pour la recherche
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Récupération de l'email principal de l'utilisateur connecté
   const email = user.user?.primaryEmailAddress?.emailAddress ?? "";
 
@@ -89,11 +92,27 @@ export default function Home() {
     }
   };
 
+  // Filtrer les factures en fonction du nom saisi dans le champ de recherche
+  const filteredInvoices = invoices.filter((invoice) =>
+    invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Wrapper>
       <div className="flex flex-col space-y-4">
         <h1 className="text-lg font-bold">Mes factures</h1>
         
+        {/* Champ de recherche */}
+        <div className="flex items-center">
+          <input
+            type="text"
+            placeholder="Rechercher une facture en utilisant son nom"
+            className="input input-bordered w-full max-w-md mr-2"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
         {/* Grille contenant les factures et le bouton de création */}
         <div className="grid md:grid-cols-3 gap-4">
           {/* Bouton pour ouvrir la modal de création de facture */}
@@ -107,13 +126,17 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Affichage des factures existantes */}
-          {invoices.length > 0 && (
-            invoices.map((invoice, index) => (
+          {/* Affichage des factures filtrées */}
+          {filteredInvoices.length > 0 ? (
+            filteredInvoices.map((invoice, index) => (
               <div key={index}>
                 <InvoiceComponent index={index} invoice={invoice} />
               </div>
             ))
+          ) : (
+            <p className="col-span-full text-center text-gray-500">
+              Aucune facture trouvée pour &quot;{searchQuery}&quot;
+            </p>
           )}
         </div>
 
