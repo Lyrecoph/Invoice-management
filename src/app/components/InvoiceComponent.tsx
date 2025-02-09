@@ -56,7 +56,7 @@ const getStatusBadge = (status: number) => {
   }
 };
 
-const InvoiceComponent: React.FC<InvoiceComponentProps> = ({ invoice, index }) => {
+const InvoiceComponent: React.FC<InvoiceComponentProps> = ({ invoice }) => {
   
   // Calcule le total de la facture en ajoutant la TVA au montant HT.
   const calculateTotal = () => {
