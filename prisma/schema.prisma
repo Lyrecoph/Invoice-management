@@ -8,10 +8,10 @@ generator client {
 }
 
 // Définition de la source de données
-// SQLite est utilisé comme base de données.
+// POSTGRESQL est utilisé comme base de données.
 // L'URL de connexion est stockée dans une variable d'environnement DATABASE_URL.
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
